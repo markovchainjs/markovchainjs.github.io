@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import reqwest from 'reqwest'
+import results from './results.js'
 
 class App extends Component {
   constructor(){
@@ -14,14 +15,17 @@ class App extends Component {
   }
 
   componentWillMount(){
-    reqwest({
-      url: 'https://icanhazdadjoke.com/search'
+    reqwest({ url: 'https://icanhazdadjoke.com/search'
       , headers: {
         'Accept': 'application/json',
         'Access-Control-Allow-Headers': '*'
       }    , method: 'get'
-    , error: function (err) { }
+    , error: (err) => { 
+        console.log('cors error, please disable cors with chrome extension', err)
+        this.create_markov(results)
+      }
     , success: (resp) => {
+        console.log('resp',resp)
         this.create_markov(resp.results)
      }
     })
@@ -60,8 +64,8 @@ class App extends Component {
   }
 
   render_current_chain(){
-    return this.state.current_chain.map((past_joke => (
-      <div style={{fontSize: '8px'}}>
+    return this.state.current_chain.map(((past_joke, i) => (
+      <div key={i} style={{fontSize: '10px'}}>
         {past_joke.joke}(#{past_joke.i})
         =>
       </div>
@@ -75,15 +79,17 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h3>Dad Joke Markov Chain</h3>
-          <p>
-            {current_selection && current_selection.joke}
-          </p>
+          <div>Current Joke:</div>
+          {current_selection && current_selection.joke}
+          <br></br>
+          <br></br>
           <button onClick={() => this.render_next_joke()}>
             Next Joke
           </button>
-          <p>
-            {this.render_current_chain()}
-          </p>
+          <br>
+          </br>
+          <div>Current Chain (The number to the right signifies the order of the joke, within all jokes): </div>
+          {this.render_current_chain()}
         </header>
       </div>
     );
