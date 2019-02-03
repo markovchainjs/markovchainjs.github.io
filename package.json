@@ -2,6 +2,7 @@
   "name": "brandless",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://127.0.0.1:5000/",
   "homepage": "https://markovchainjs.github.io/",
   "devDependencies": {
     "gh-pages": "^2.0.1",
@@ -9,10 +10,15 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "fs": "0.0.1-security",
     "jsonp": "^0.2.1",
+    "memory-cache": "^0.2.0",
+    "nodemon": "^1.18.9",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "reqwest": "^2.0.5"
+    "reqwest": "^2.0.5",
+    "xhr2": "^0.1.4",
+    "yarn": "^1.13.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,7 +26,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "\"yarn server\" \"yarn client\""
   },
   "eslintConfig": {
     "extends": "react-app"

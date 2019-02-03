@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import reqwest from 'reqwest'
-import results from './results.js'
 
 class App extends Component {
   constructor(){
@@ -15,20 +13,14 @@ class App extends Component {
   }
 
   componentWillMount(){
-    reqwest({ url: 'https://icanhazdadjoke.com/search'
-      , headers: {
-        'Accept': 'application/json',
-        'Access-Control-Allow-Headers': '*'
-      }    , method: 'get'
-    , error: (err) => { 
-        console.log('cors error, please disable cors with chrome extension', err)
-        this.create_markov(results)
-      }
-    , success: (resp) => {
-        console.log('resp',resp)
-        this.create_markov(resp.results)
-     }
-    })
+    this.callAPI()
+  }
+
+  callAPI = async () => {
+    const response = await fetch('/api/jokes');
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    this.create_markov(body.results)
   }
 
   create_markov(results){
